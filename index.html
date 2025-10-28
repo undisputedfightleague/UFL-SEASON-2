@@ -246,6 +246,39 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
   margin: 6px 0;
 }
 
+/* 🧩 Make player cards act like modals */
+.player-card-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 10px 20px 10px;
+}
+
+/* 🚫 Lock background scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+
+/* Ensure modal always covers everything */
+#fighter-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000; /* above .tabs (z=999) */
+  overflow-y: auto;
+}
+
+
 </style>
 </head>
 <body>
@@ -1439,6 +1472,27 @@ function showBadgeDesc(desc) { const existing = document.getElementById('badge-d
   }
   document.addEventListener('DOMContentLoaded',()=>{ switchTab('home'); });
 
+/* ===============================
+   🧩 PLAYER CARD OVERLAY SYSTEM
+   =============================== */
+
+   function showPlayerCard(fighter) {
+  const playerCardHTML = `
+    <div class="player-card-overlay" id="player-overlay">
+      <div class="player-card">
+        ${buildPlayerCardHTML(fighter)}
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', playerCardHTML);
+}
+
+function closePlayerCard() {
+  const overlay = document.getElementById('player-overlay');
+  if (overlay) overlay.remove();
+}
+
+
   </script>
   
   <style>
@@ -1463,6 +1517,17 @@ function showBadgeDesc(desc) { const existing = document.getElementById('badge-d
   ...
 }
 .rank-num{width:36px;text-align:center;color:#9ca3af;font-weight:700;}
+
+/* 🏆 Fix Champion Card alignment on mobile */
+#world-champion-card,
+#caf-champion-card {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 12px auto;  /* centers horizontally */
+  width: fit-content;
+  max-width: 95%;            /* prevents overflow on small screens */
+}
+
 
 /* ✅ ADD THIS NEW SECTION BELOW */
 .player-header-row {
