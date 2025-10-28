@@ -314,21 +314,37 @@ html, body {
   max-width: 100%;
 }
 
-/* Prevent player rows or champion cards from stretching too wide */
-#world-tab .champion-card,
-#world-tab .player-row,
-#world-tab .player-header-row {
+/* Prevent champion card and rows from stretching too wide */
+#world-tab .champion-card {
   width: 100%;
   overflow-x: hidden;
-  flex-wrap: wrap;
 }
 
-/* Prevent rank columns from forcing overflow */
+/* 🟡 Player rows and headers now use grid (no wrap needed) */
+#world-tab .player-header-row,
+#world-tab .player-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 80px 80px; /* Rank | Fighter | Points | Record */
+  align-items: center;
+  text-align: left;
+  gap: 6px;
+}
+
+/* Prevent rank columns and side sections from forcing overflow */
 #world-tab .rank-num,
 #world-tab .players-column-left,
 #world-tab .players-column-right {
   min-width: 0;
 }
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 600px) {
+  #world-tab .player-header-row,
+  #world-tab .player-row {
+    grid-template-columns: 36px 1fr 60px 60px;
+  }
+}
+
 
 
 
