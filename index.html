@@ -433,6 +433,53 @@ html, body {
   justify-self: end;
 }
 
+/* 🎯 Perfect alignment for UFL WORLD ranking rows (no points column) */
+#world-tab .fighter-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 80px; /* Rank | Name | Record */
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+#world-tab .rank-num {
+  text-align: center;
+}
+
+#world-tab .fighter-record {
+  text-align: right;
+  justify-self: end;
+  width: 80px;
+}
+
+#world-tab .fighter-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Match header row for alignment consistency */
+#world-tab .player-header-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 80px;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 600px) {
+  #world-tab .fighter-row,
+  #world-tab .player-header-row {
+    grid-template-columns: 36px 1fr 70px;
+  }
+  #world-tab .fighter-record {
+    width: 70px;
+  }
+}
+
+
 
 </style>
 </head>
@@ -1346,7 +1393,7 @@ function renderRankings(list, containerId) {
     container.insertAdjacentHTML('beforeend', `
       <div class="fighter-row" onclick="openFighterModal('${f.idMain}')">
         <div class="rank-num">#${rankNum}</div>
-        <div class="fighter-name">${champIcons} ${escapeHtml(f.name)}</div>
+        <div class="fighter-name">${escapeHtml(f.name)} ${champIcons}</div>
         <div class="fighter-record">${f.wins}-${f.losses}-${f.draws}</div>
       </div>
     `);
