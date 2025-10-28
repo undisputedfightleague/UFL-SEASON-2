@@ -71,8 +71,41 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
 .players-column-left{ width:70%; display:flex; align-items:center; gap:8px; }
 .players-column-right{ width:30%; text-align:right; }
 
-.fights-columns{ display:grid; grid-template-columns: 1fr 140px 120px 160px; gap:8px; width:100%; font-weight:700; }
-.fights-row{ display:grid; grid-template-columns: 1fr 140px 120px 160px; gap:8px; align-items:center; width:100%; }
+/* Fights layout: Date | Fight | Method | Winner */
+.fights-columns {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 140px; /* narrower Date column */
+  gap: 14px; /* wider gap between all columns */
+  width: 100%;
+  font-weight: 700;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 6px;
+  align-items: center;
+}
+
+.fights-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 140px;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+}
+
+/* mobile adjustments */
+@media (max-width: 900px) {
+  .fights-columns,
+  .fights-row {
+    grid-template-columns: 70px 1fr 80px 100px;
+    font-size: 13px;
+    gap: 10px;
+  }
+}
+
+
 
 .streak{ font-size:14px; margin-right:6px; }
 .streak.hot{ color:#ffb86b; }
@@ -82,8 +115,24 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
 .breakdown{ border-top:1px solid rgba(255,215,0,0.08); margin-top:12px; padding-top:10px; color:var(--muted); font-size:13px; }
 .breakdown strong{ color:var(--gold); }
 
-.badge{ margin-right:8px; padding:6px 8px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,215,0,0.15); font-size:14px; cursor:help; transition:all 0.15s ease; display:inline-block; }
-.badge:hover{ background:rgba(255,215,0,0.08); transform:translateY(-2px); }
+.badge {
+  margin-right: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,215,0,0.15);
+  font-size: 14px;
+  cursor: pointer; /* 👈 changed from help → pointer */
+  transition: transform 0.15s ease, background 0.15s ease;
+  display: inline-block;
+  color: #facc15; /* gold tone for consistency */
+}
+
+.badge:hover {
+  background: rgba(255,215,0,0.1);
+  transform: scale(1.1); /* 👈 subtle pop on hover */
+}
+
 
 .rank-num{width:40px;text-align:center;color:#9ca3af;font-weight:700;margin-right:8px;}
 .fighter-row {
@@ -116,6 +165,45 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
   .tabs{ justify-content:flex-start; overflow:auto; padding-left:8px; }
   .fights-columns,.fights-row{ grid-template-columns:1fr 120px 100px 100px; }
 }
+
+/* Hide inactive tab content */
+.tab-content.hidden { display: none; }
+
+/* 🏠 HOME TAB STYLES */
+#home-tab {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#home-tab h1 {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+#home-tab {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#home-tab h1 {
+  text-align: center;  /* keep only the main title centered */
+}
+
+#home-tab h2,
+#home-tab p,
+#home-tab ul {
+  text-align: left;    /* align all other text to the left */
+}
+
+
+#home-tab p {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin: 6px 0;
+}
+
 </style>
 </head>
 <body>
@@ -126,17 +214,74 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
     </div>
 <!-- END Part 1 of 6 -->
 <!-- START Part 2 of 6 -->
+
 <div class="tabs" role="tablist" aria-label="Main tabs">
-  <button id="btn-world" class="tab-btn tab-active" onclick="switchTab('world')"><i class="fas fa-globe-americas"></i>&nbsp;UFL WORLD</button>
-  <button id="btn-caf" class="tab-btn" onclick="switchTab('caf')"><i class="fas fa-user-pen"></i>&nbsp;UFL CAF</button>
-  <button id="btn-players" class="tab-btn" onclick="switchTab('players')"><i class="fas fa-user-friends"></i>&nbsp;PLAYERS</button>
-  <button id="btn-fights" class="tab-btn" onclick="switchTab('fights')"><i class="fas fa-list"></i>&nbsp;FIGHTS</button>
-  
-  <button id="btn-admin" class="tab-btn" onclick="switchTab('admin')"><i class="fas fa-lock"></i>&nbsp;ADMIN</button>
+  <!-- 🏠 HOME button (new) -->
+  <button id="btn-home" class="tab-btn" onclick="switchTab('home')">
+    <i class="fas fa-home"></i>&nbsp;HOME
+  </button>
+
+  <button id="btn-world" class="tab-btn tab-active" onclick="switchTab('world')">
+    <i class="fas fa-globe-americas"></i>&nbsp;UFL WORLD
+  </button>
+  <button id="btn-caf" class="tab-btn" onclick="switchTab('caf')">
+    <i class="fas fa-user-pen"></i>&nbsp;UFL CAF
+  </button>
+  <button id="btn-players" class="tab-btn" onclick="switchTab('players')">
+    <i class="fas fa-user-friends"></i>&nbsp;PLAYERS
+  </button>
+  <button id="btn-fights" class="tab-btn" onclick="switchTab('fights')">
+    <i class="fas fa-list"></i>&nbsp;FIGHTS
+  </button>
+  <button id="btn-admin" class="tab-btn" onclick="switchTab('admin')">
+    <i class="fas fa-lock"></i>&nbsp;ADMIN
+  </button>
 </div>
+
 
 <div class="frosted">
   <!-- WORLD TAB -->
+
+<!-- 🏠 HOME TAB -->
+<div id="home-tab" class="tab-content">
+
+  <h1>UFL RANKINGS BREAKDOWN</h1>
+  
+
+  <ul style="list-style:none;padding:0;">
+    <br>
+    <li><b>BASE POINTS</b>
+
+      
+
+    <li>Win: +3 Points</li>
+    <li>Draw: +1 Point</li>
+    <li>Loss: - 1.5 (increasing with each consecutive loss)</li>
+    <br> </br>
+    <li><b>FINISH BONUS</b>
+      <li>TKO/KO Win: +1 Point</li>
+      <br> </br>
+      <li><b>OPPONENT QUALITY</b>
+        <li>Wins over opponents with high win percentages earns a small bonus</li>
+        <br> </br>
+        <li><b>RECENCY BONUS</b>
+          <li>Awards recent activity</li>
+          <br> </br>
+          <li><b>WINNING STREAK</b>
+            <li>After 3 consecutive wins, each additional win earns +1 (capped at +5)</li>
+            <br> </br>
+            <li><b>CONTENDER BONUS</b>
+              <li>Small bonus if either fighter is ranked inside the top 10</li>
+              <br> </br>
+              <li><b>INACTIVITY</b>
+                <li>After 20 days of inactivity, total points gradually decay</li>
+  
+  
+  
+  
+</div>
+
+
   <div id="world-tab" class="tab-panel">
     <div class="grid-main">
       <div>
@@ -192,9 +337,9 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
 
     <div class="fights-header" style="margin-bottom:6px;">
       <div class="fights-columns">
+        <div>DATE</div>
         <div>FIGHT</div>
         <div>METHOD</div>
-        <div>DATE</div>
         <div>WINNER</div>
       </div>
     </div>
@@ -208,7 +353,9 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
   <div id="admin-tab" class="tab-panel hidden" style="margin-top:14px;">
     <div id="admin-login" class="frosted">
       <h3 style="margin:0;font-family:Orbitron;">Admin Login</h3>
-      <div class="small-muted">Enter admin password to unlock admin tools. (fallback: <code>ufltest123</code>)</div>
+      <div class="small-muted">Enter admin password to unlock admin tools.
+
+      </div>
       <div style="margin-top:10px;">
         <input id="admin-pass" type="password" placeholder="Admin password" />
         <div style="margin-top:8px;"><button class="btn btn-primary" onclick="attemptAdminLogin()">Login</button></div>
@@ -350,7 +497,9 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  firebase.firestore().enablePersistence().catch(() => {});
   
+
   /* ===========================
      🌐 GLOBAL STATE & HELPERS
      =========================== */
@@ -890,6 +1039,9 @@ function computeRankings() {
 
 function renderAll() {
   const { world, caf } = computeRankings();
+// 🧠 Cache the latest computed rankings for faster reloads
+localStorage.setItem('cachedRankings', JSON.stringify({ world, caf }));
+
   renderChampionCard('world', $('world-champion-card'));
   renderChampionCard('caf', $('caf-champion-card'));
   renderRankings(world, 'world-rankings');
@@ -1008,12 +1160,13 @@ function refreshRankings() {
       if (query && !fightStr.toLowerCase().includes(query)) return;
       const winner = (f.winner==='0'||f.winner===0)?'Draw':(fighters.find(x=>x.id===f.winner)?.name || '');
       container.insertAdjacentHTML('beforeend',`
-        <div class="fights-row">
-          <div>${escapeHtml(fightStr)}</div>
-          <div>${escapeHtml(f.method||'')}</div>
-          <div>${formatDateShort(f.date)}</div>
-          <div>${escapeHtml(winner)}</div>
-        </div>`);
+  <div class="fights-row">
+    <div>${formatDateShort(f.date)}</div>
+    <div>${escapeHtml(fightStr)}</div>
+    <div>${escapeHtml(f.method||'')}</div>
+    <div>${escapeHtml(winner)}</div>
+  </div>`);
+
     });
   }
   
@@ -1171,7 +1324,8 @@ content.style.scrollBehavior = 'smooth';
 </div>
 
       <div class="fighter-badges">
-        ${badges.map(b => `<span class="badge" title="${b.desc}">${b.icon}</span>`).join('')}
+        ${badges.map(b => `<span class="badge" onclick="showBadgeDesc('${b.desc}')">${b.icon}</span>`).join('')}
+
       </div>
     </div>
     <div class="fighter-modal-body">
@@ -1233,11 +1387,13 @@ setTimeout(() => {
   modal.classList.remove('hidden');
 }
 
+function showBadgeDesc(desc) { const existing = document.getElementById('badge-desc-popup'); if (existing) existing.remove(); const popup = document.createElement('div'); popup.id = 'badge-desc-popup'; popup.textContent = desc; popup.style.position = 'fixed'; popup.style.bottom = '20px'; popup.style.left = '50%'; popup.style.transform = 'translateX(-50%)'; popup.style.background = 'rgba(0,0,0,0.85)'; popup.style.color = '#ffd700'; popup.style.padding = '10px 16px'; popup.style.borderRadius = '10px'; popup.style.fontSize = '14px'; popup.style.border = '1px solid rgba(255,215,0,0.3)'; popup.style.zIndex = '9999'; popup.style.maxWidth = '80%'; popup.style.textAlign = 'center'; popup.style.boxShadow = '0 0 8px rgba(255,215,0,0.4)'; document.body.appendChild(popup); setTimeout(() => popup.remove(), 3000); }
+
   function closeFighterModal(){ $('fighter-modal').classList.add('hidden'); }
   
   /* Simple tab switcher (ensures one visible at all times) */
   function switchTab(tab) {
-    const tabs = ['world','caf','players','fights','social','admin'];
+    const tabs = ['home','world','caf','players','fights','social','admin'];
     tabs.forEach(t=>{
       const el = document.getElementById(t+'-tab');
       const btn = document.getElementById('btn-'+t);
@@ -1246,7 +1402,8 @@ setTimeout(() => {
     });
     renderAll();
   }
-  document.addEventListener('DOMContentLoaded',()=>{ switchTab('world'); });
+  document.addEventListener('DOMContentLoaded',()=>{ switchTab('home'); });
+
   </script>
   
   <style>
