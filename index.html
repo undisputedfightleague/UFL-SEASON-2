@@ -278,6 +278,31 @@ body.modal-open {
   overflow-y: auto;
 }
 
+/* 📱 Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ensure all major containers respect viewport width */
+.container,
+#world-tab,
+#players-tab,
+#fights-tab,
+#caf-tab,
+#social-tab,
+#admin-tab {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Make sure tab bar doesn’t cause overflow */
+.tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 
 </style>
 </head>
