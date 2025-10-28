@@ -372,6 +372,50 @@ html, body {
 }
 
 
+/* 🧩 FINAL FIX – lock UFL WORLD row alignment */
+#world-tab .player-row {
+  display: grid !important;
+  grid-template-columns: 40px 1fr 70px 70px; /* Rank | Name | Points | Record */
+  align-items: center;
+  gap: 6px;
+}
+
+#world-tab .player-header-row {
+  display: grid !important;
+  grid-template-columns: 40px 1fr 70px 70px;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* Columns: */
+#world-tab .rank-num {
+  text-align: center;
+}
+
+#world-tab .players-column-left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#world-tab .players-column-right {
+  text-align: right;
+  justify-self: end;
+  width: 70px;
+}
+
+/* Responsive tweak for smaller screens */
+@media (max-width: 600px) {
+  #world-tab .player-row,
+  #world-tab .player-header-row {
+    grid-template-columns: 32px 1fr 60px 60px;
+  }
+  #world-tab .players-column-right {
+    width: 60px;
+  }
+}
 
 
 
