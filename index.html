@@ -417,6 +417,21 @@ html, body {
   }
 }
 
+/* 🎯 Enforce perfect alignment on all ranking rows */
+#world-tab .player-row,
+#world-tab .player-header-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 70px 70px;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+#world-tab .player-points,
+#world-tab .player-record {
+  text-align: right;
+  justify-self: end;
+}
 
 
 </style>
@@ -1317,27 +1332,27 @@ function refreshRankings() {
 }
 
   
-  /* Rank list with numbers & small platform-champ icons */
-  function renderRankings(list, containerId) {
-    const container = $(containerId);
-    if (!container) return;
-    container.innerHTML = '';
-    list.forEach((f, i) => {
-      const rankNum = i + 1;
-      const champIcons = getChampionIcons(f);
-      container.insertAdjacentHTML('beforeend', `
-        <div class="fighter-row" onclick="openFighterModal('${f.idMain}')">
-          
-          <span class="rank-num">#${rankNum}</span>
-          <span class="fighter-name">${escapeHtml(f.name)} ${champIcons}</span>
-          <span class="fighter-record">${f.wins}-${f.losses}-${f.draws}</span>
-          
+/* Rank list with numbers & small platform-champ icons */
+function renderRankings(list, containerId) {
+  const container = $(containerId);
+  if (!container) return;
+  container.innerHTML = '';
 
-          
-        </div>`);
-        
-    });
-  }
+  list.forEach((f, i) => {
+    const rankNum = i + 1;
+    const champIcons = getChampionIcons(f);
+    const points = f.points ?? 0; // ✅ safe fallback for undefined values
+
+    container.insertAdjacentHTML('beforeend', `
+      <div class="fighter-row" onclick="openFighterModal('${f.idMain}')">
+        <div class="rank-num">#${rankNum}</div>
+        <div class="fighter-name">${champIcons} ${escapeHtml(f.name)}</div>
+        <div class="fighter-record">${f.wins}-${f.losses}-${f.draws}</div>
+      </div>
+    `);
+  });
+}
+
   
   /* Small trophy icons for platform champs */
   function getChampionIcons(f) {
