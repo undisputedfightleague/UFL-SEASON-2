@@ -667,10 +667,13 @@ html, body {
           <h3 style="margin:0 0 8px 0;">Manage Fighters</h3>
           <div class="small-muted">Edit names, platform, retire/unretire. Points column shows calculated ranking points (combined names).</div>
           <div style="margin-top:8px;">
+            
             <table>
-              <thead><tr><th>Name</th><th>Platform</th><th>Record</th><th>Points</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Name</th><th>Platform</th><th>Actions</th></tr></thead>
               <tbody id="admin-fighters-list"></tbody>
             </table>
+            
+
           </div>
           <hr style="margin:8px 0;">
           <h4 style="margin:6px 0;">Add Fighter</h4>
@@ -2235,8 +2238,7 @@ $('delete-fight-btn').addEventListener('click', async () => {
       tr.innerHTML = `
         <td>${escapeHtml(f.name)} ${f.retired ? '<span style="color:#f87171;font-size:12px;margin-left:6px;">[Retired]</span>' : ''}</td>
         <td>${escapeHtml(f.platform||'—')}</td>
-        <td>${(f.wins||0)}-${(f.losses||0)}-${(f.draws||0)}</td>
-        <td>${Number(points).toFixed(1)}</td>
+        
         <td>
           <button class="btn" onclick="openEditFighter('${f.id}')"><i class="fas fa-edit"></i></button>
           <button class="btn" onclick="toggleRetire('${f.id}')">${f.retired ? '<i class="fas fa-undo"></i>' : '<i class="fas fa-user-slash"></i>'}</button>
