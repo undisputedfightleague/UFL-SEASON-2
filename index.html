@@ -293,7 +293,6 @@ html, body {
 #players-tab,
 #fights-tab,
 #caf-tab,
-#social-tab,
 #admin-tab {
   max-width: 100vw;
   overflow-x: hidden;
@@ -1343,7 +1342,6 @@ localStorage.setItem('cachedRankings', JSON.stringify({ world, caf }));
   renderRankings(caf, 'caf-rankings');
   renderPlayers();
   renderFights();
-  renderSocial();
 }
 
 function refreshRankings() {
@@ -2124,43 +2122,45 @@ async function adminAddFight(){
     adminDeleteFight(fid);
   }
   
-  /* Admin: Delete selected fight from dropdown */
-  async function adminDeleteSelectedFight(){
-    const sel = $('admin-fights-dropdown'); if(!sel || !sel.value) return alert('Select a fight');
-    const id = sel.value;
-    if(!confirm('Delete selected fight?')) return;
-    await adminDeleteFight(id);
-  }
-  
-  /* Delete fight helper */
-  async function adminDeleteFight(id){
-    try{
-      
-// 🗑️ Delete fight
-$('delete-fight-btn').addEventListener('click', async () => {
+/* 🗑️ Admin: Delete selected fight */
+async function adminDeleteSelectedFight() {
   const selectedFightId = $('admin-fights-dropdown').value;
-  if (!selectedFightId) return alert('Select a fight first!');
-  if (!confirm('Are you sure you want to delete this fight?')) return;
-
-  // Delete the fight from Firestore
-  await deleteDoc(doc(db, "fights", selectedFightId));
-
-  // 🔁 Reload fights and recalculate records/points
-  await loadFightsFromFirestore();
-  await recomputeAllFighterStats(); // <-- THIS FIXES RECORDS NOT UPDATING
-
-  // Rebuild UI
-  populateAdminFightsDropdown();
-  populateAdminFightsList();
-  renderAll();
-
-  alert('Fight deleted and stats updated.');
-});
-
-      closeEditFightModal();
-      alert('Deleted.');
-    }catch(e){ console.error(e); alert('Failed to delete'); }
+  if (!selectedFightId) {
+    alert('Select a fight first!');
+    return;
   }
+
+  const confirmDelete = confirm('Are you sure you want to delete this fight?');
+  if (!confirmDelete) return;
+
+  try {
+    // 🗑️ Delete from Firestore
+    await db.collection("fights").doc(selectedFightId).delete();
+
+
+// 🔁 Recompute updated stats
+await recomputeAllFighterStats();
+
+    // 🧮 Recompute and render rankings
+    const { world, caf } = computeRankings();
+    renderRankings(world, 'world-rankings');
+    renderRankings(caf, 'caf-rankings');
+
+    // ♻️ Refresh Admin UI
+    populateAdminFightsDropdown();
+    populateAdminFightsList();
+    renderAll();
+
+    alert('Fight deleted and stats updated.');
+  } catch (e) {
+    console.error(e);
+    alert('Failed to delete fight.');
+  }
+}
+
+
+
+
   
   /* Admin: delete fighter */
   function deleteFighter(id){
