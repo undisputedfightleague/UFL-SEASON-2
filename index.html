@@ -208,6 +208,8 @@ input,select{ padding:8px; border-radius:6px; background:rgba(0,0,0,0.36); color
   .fights-columns,.fights-row{ grid-template-columns:1fr 120px 100px 100px; }
 }
 
+
+
 /* Hide inactive tab content */
 .tab-content.hidden { display: none; }
 
@@ -479,6 +481,25 @@ html, body {
   }
 }
 
+/* Make Admin dashboard stack to single column on smaller screens */
+@media (max-width: 900px) {
+  /* target the grid container which currently uses inline style display:grid */
+  #admin-dashboard > div[style*="display:grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Ensure any element using grid-column:span 2 stops spanning and just stacks */
+  #admin-dashboard > div[style*="display:grid"] .frosted[style*="grid-column:span 2"] {
+    grid-column: auto !important;
+  }
+
+  /* small spacing tweak so stacked cards don't feel cramped */
+  #admin-dashboard > div[style*="display:grid"] .frosted {
+    width: 100%;
+  }
+}
+
+
 
 
 </style>
@@ -640,7 +661,8 @@ html, body {
           <div style="display:flex;gap:8px;"><button class="btn btn-danger" onclick="logoutAdmin()">Logout</button></div></div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="admin-grid">
+
         <div class="frosted">
           <h3 style="margin:0 0 8px 0;">Manage Fighters</h3>
           <div class="small-muted">Edit names, platform, retire/unretire. Points column shows calculated ranking points (combined names).</div>
